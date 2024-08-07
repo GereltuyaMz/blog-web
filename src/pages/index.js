@@ -1,35 +1,32 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { useEffect, useState } from "react";
 import Card from "@/components/Card";
 
 export default function Home() {
-  const [articles, setArticles] = useState([])
+  console.log("HOME FUNCTION");
+  const [articles, setArticles] = useState([]);
+  const [count, setCount] = useState(0);
 
   const getArticleData = async () => {
-    const response = await fetch('https://dev.to/api/articles');
+    const response = await fetch("https://dev.to/api/articles");
     const data = await response.json();
-    setArticles(data)
-    // console.log("data", data)
-  }
+    setArticles(data);
+    console.log("DOWNLOADED DATA");
+  };
 
   useEffect(() => {
+    console.log("EFFECT");
     getArticleData();
-  }, [])
+  }, []);
 
-  console.log("articles", articles)
   return (
     <>
-      <main className="h-screen flex justify-center items-center">
-        <div>
-          {articles.map((article) => {
-            console.log("article", article)
-            return (
-              <Card title={article.title} />
-            )
-          })}
+      <main className="flex flex-col items-center justify-center">
+        <div className="flex flex-wrap max-w-[1280px] m-auto gap-4">
+          {articles.map((article) => (
+            <Card article={article} />
+          ))}
         </div>
-        <p>Main Content</p>
+        <button onClick={() => setCount(count + 1)}>Load More</button>
       </main>
     </>
   );
