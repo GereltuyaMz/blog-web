@@ -2,21 +2,27 @@ import { useEffect, useState } from "react";
 import Card from "@/components/Card";
 
 export default function Home() {
-  console.log("HOME FUNCTION");
   const [articles, setArticles] = useState([]);
-  const [count, setCount] = useState(0);
+  const [page, setPage] = useState(1);
 
   const getArticleData = async () => {
-    const response = await fetch("https://dev.to/api/articles");
+    const response = await fetch(`https://dev.to/api/articles?page=${page}&per_page=20`);
     const data = await response.json();
-    setArticles(data);
-    console.log("DOWNLOADED DATA");
+
+    setArticles(prevArticles => {
+      console.log("prevArticles", prevArticles)
+      const newArticles = data.filter(article => !prevArticles.some(prevArticle => prevArticle.id === article.id));
+      return [...prevArticles, ...newArticles];
+    });
   };
 
   useEffect(() => {
-    console.log("EFFECT");
     getArticleData();
-  }, []);
+  }, [page]);
+
+  const handleLoadMore = () => {
+    setPage(prevPage => prevPage + 1)
+  }
 
   return (
     <>
@@ -26,7 +32,7 @@ export default function Home() {
             <Card article={article} />
           ))}
         </div>
-        <button onClick={() => setCount(count + 1)}>Load More</button>
+        <button onClick={handleLoadMore}>Load More</button>
       </main>
     </>
   );
