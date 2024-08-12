@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Card from "@/components/Card";
+import { SearchContext } from "@/provider/search-provider";
 
 export default function Home() {
+  const { searchValue } = useContext(SearchContext);
   const [articles, setArticles] = useState([]);
   const [page, setPage] = useState(1);
 
@@ -27,7 +29,9 @@ export default function Home() {
   return (
     <>
       <main className="flex flex-col items-center justify-center">
+        <h2>Хайлт: {searchValue}</h2>
         <div className="flex flex-wrap max-w-[1280px] m-auto gap-4">
+
           {articles.map((article) => (
             <Card article={article} />
           ))}
