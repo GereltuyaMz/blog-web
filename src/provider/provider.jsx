@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export const MyContext = createContext(null);
@@ -13,7 +13,7 @@ const MyProvider = ({ children }) => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `https://dev.to/api/artic?page=${page}&per_page=20`
+        `https://dev.to/api/articles?page=${page}&per_page=20`
       );
       const data = await response.json();
 
@@ -48,6 +48,10 @@ const MyProvider = ({ children }) => {
       {children}
     </MyContext.Provider>
   );
+};
+
+export const useMyContext = () => {
+  return useContext(MyContext);
 };
 
 export default MyProvider;
